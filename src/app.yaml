@@ -1,0 +1,32 @@
+application: itsmytuition
+version: 2-1
+api_version: 1
+runtime: python
+
+handlers:
+#- url: /_ah/login_required
+#  script: do_openid_login.py
+
+- url: /favicon.ico
+  static_files: tuition/media/images/favicon.ico
+  upload: tuition/media/images/favicon.ico
+  login: required
+
+- url: /stylesheets/(.+)\..+\.\d+\.css
+  static_files: tuition/media/styles/\1.css
+  upload: tuition/media/styles/*.*
+  expiration: '3650d'
+  login: required
+
+- url: /stylesheets
+  static_dir: tuition/media/styles
+  login: required
+
+- url: /images
+  static_dir: tuition/media/images
+  expiration: '3650d'
+  login: required
+
+- url: /.*
+  script: main.py
+
