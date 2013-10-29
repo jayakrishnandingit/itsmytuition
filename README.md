@@ -25,4 +25,4 @@ open terminal goto /yourpath/to/Itsmytuition/sdk
 
 type in <b>python dev_appserver.py /yourpath/to/Itsmytuition/src/ --port=8080 --datastore_path=yourpath/to/Itsmytuition/dev_appserver.datastore --require_index=yes --host=0.0.0.0</b>
 
-
+Above command will run your development server and you can access the application via URL <b>http://localhost:8080</b>
