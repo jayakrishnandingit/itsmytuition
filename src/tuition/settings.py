@@ -26,6 +26,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 INSTALLED_APPS = (
+    'django.contrib.humanize',
+    'tuition.common',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -54,9 +56,6 @@ FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler
 # Do not disclose it
 SECRET_KEY = '@anlngdfig$#%$%^&smfldkhdgflhndf__its@my@tuitiongfad'
 
-FB_APP_ID = '596228337059631'
-FB_SECRET_KEY = '65b059c58b952c2299bbe86b3b7aecf6'
-
 DEFAULT_DATE_FORMAT = 'd/m/Y'
 DEFAULT_DATE_INPUT_FORMATS = '%d/%m/%Y'
 FIRST_DAY_OF_WEEK = 0
@@ -67,7 +66,9 @@ USE_I18N = False
 
 # Mark this flag as True if you ever want to prohibit the user activity.
 # @see: tuition.middleware.HandleRequests
-SITE_DOWN_FOR_MAINTENANCE = True
+SITE_DOWN_FOR_MAINTENANCE = False
 SITE_DOWN_DESCRIPTION = 'Its My Tuition is under periodic maintenance and is expected to be down for an hour. <br />\
                          This is to ensure that, we offer the best service, and hence make our site a novel experience for you.'
 SITE_SUPPORT_EMAIL = 'care.itsmytuition@tuitionathome.org'
+
+IS_DEV_ENV = os.environ['SERVER_SOFTWARE'].startswith('Development')

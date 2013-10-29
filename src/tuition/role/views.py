@@ -31,8 +31,8 @@ def viewRoles(request):
     UserFilter().checkUserRole(request.path)
     roles = Role.all().fetch(limit = 1000)
     template_values = {
-                       'loggedInEmployee'   : AppManager.getCurrentLoggedInUser(),
-                       'url'                : AppManager.createLogoutURL(request.path),
+                       'loggedInEmployee'   : AppManager.getUserByEmail(AppManager.getCurrentLoggedInUser().email()),
+                       'url'                : AppManager.createLogoutURL(),
                        'homePage'           : '/',
                        'supportEmail'       : SITE_SUPPORT_EMAIL,
                        'roles'              : roles,
@@ -47,12 +47,11 @@ def addRole(request):
 
     UserFilter().checkUserRole(request.path)
     template_values = {
-                       'loggedInEmployee'   : AppManager.getCurrentLoggedInUser(),
-                       'url'                : AppManager.createLogoutURL(request.path),
+                       'loggedInEmployee'   : AppManager.getUserByEmail(AppManager.getCurrentLoggedInUser().email()),
+                       'url'                : AppManager.createLogoutURL(),
                        'homePage'           : '/',
                        'supportEmail'       : SITE_SUPPORT_EMAIL,
                        'permissions'        : PERMISSIONS,
                        'form'               : RoleAddForm()
                        }
     return render_to_response('addRole.html', template_values)
-

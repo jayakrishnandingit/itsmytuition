@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<link type="text/css" rel="stylesheet" href="/stylesheets/tuitionMain.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/tuitionMain.js"></script>
 	{% block head %} {% endblock %}
 </head>
 <body>
@@ -15,74 +16,104 @@
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
 	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=135103059987379";
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
 	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-	</script>
-	<div class="mainHeader">
-		<div class="logoContainer">
-			<img class="logo" src="/images/logo.png" alt="Logo" />
-		</div>
-		<div class="subHeader borderRadius15">
-			<div class="searchMain">
-				<input type="search" placeholder="Search Students" />
-				<button>
-					<img src="/images/search.gif" class="search" />
-				</button>
-			</div>
-			<div class="logout">
-				<div class="floatLeft">Welcome,</div>
-				<div class="floatLeft">
-					<ul id="userName">
-						<li>{{loggedInEmployee.email}}
-							<div class="menu-container-1">
-								<ul id="userNameMenu">
-									<li><a href="/">Profile</a></li>
-									<li><a href="{{url}}">Logout</a></li>							
-								</ul>
-							</div>
-						</li>
-					</ul>			
-				</div> 
-			</div>
-			<!-- <div class="quickLinks">
-				In future we may need to implement quick links here.
-			</div> -->
-		</div>
+	}(document, 'script', 'facebook-jssdk'));</script>
+	<div id="showException">
+		<span class="exceptionMessage">
+			<b>Oops! That was an error.</b>
+			We regret the inconvenience caused. Please try after sometime.
+			{% include "templates/supportTemplate.html" %}.
+		</span>
+		<span class="exceptionDismissImage">
+			<img class="floatRight image" id="dismissShowException" src="/images/close.png" alt="Dismiss" title="Dismiss this dialogue" />
+		</span>
 	</div>
-	<nav>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/">Students</a>
-				<ul>
-					<li><a href="/">Profile</a></li>
-					<li><a href="/">Enroll a Student</a></li>
-					<li><a href="/">View Students</a></li>
-					<li><a href="/">View Classes</a></li>
-				</ul>
-			</li>
-			<li><a href="/">Teachers</a>
-				<ul>
-					<li><a href="/">Enroll a Teacher</a></li>
-					<li><a href="/">View Teachers</a></li>
-				</ul>
-			</li>
-			<li><a href="/">Exams</a>
-				<ul>
-					<li><a href="/">Schedule an Exam</a></li>
-					<li><a href="/">View Exams</a></li>
-				</ul>		
-			</li>
-			<li><a href="/">Tools</a>
-				<ul>
-					<li><a href="/viewRoles">Roles</a></li>
-					<li><a href="/addAnExpense">New Expense</a></li>
-					<li><a href="/viewExpenses">View Expenses</a></li>
-				</ul>	
-			</li>
-		</ul>
-	</nav>
+	<div class="headerContainer">
+		<div class="mainHeader">
+			<div class="logoContainer">
+				<img class="logo" src="/images/logo.png" alt="Logo" />
+			</div>
+			<div class="subHeader borderRadius15">
+				<div class="logout">
+					<div class="logoutIconContainer">
+						{% if loggedInEmployee.key %}
+							<a href="{% url tuition.user.views.profile %}">
+								<span class="image profileIcon" title="Profile"></span>
+							</a>
+						{% endif %}
+						<a href="{{url}}">
+							<span class="image icon logoutIcon" title="Logout"></span>
+						</a>
+					</div>
+					<div class="welcome">
+						Welcome,
+						<span class="userName">
+							{% if loggedInEmployee.key %}
+								{{loggedInEmployee.name}}
+							{% else %}
+								{{loggedInEmployee.email}}
+							{% endif %}
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="{% url tuition.home.views.home %}">Home</a></li>
+				{% if loggedInEmployee.key %}
+					<li><a href="javascript:void(0);">Me</a>
+						<ul>
+							<li><a href="{% url tuition.user.views.profile %}">Profile</a></li>
+						</ul>
+					</li>
+				{% endif %}
+				<li><a href="javascript:void(0);">Expense</a>
+					<ul>
+						<li><a href="{% url tuition.tools.views.addAnExpense %}">New Expense</a></li>
+						<li><a href="{% url tuition.tools.views.viewUserExpenses %}">View Expenses</a></li>
+					</ul>	
+				</li>
+			</ul>
+		</nav>
+	</div>
 	<div class="mainContent">
+		<div id="likeLinkToggle" class="likeLinkToggleButton">
+			<div class="likeContent">
+				L
+				<br clear="all" />
+				I
+				<br clear="all" />
+				K
+				<br clear="all" />
+				E
+				<br clear="all" />
+				<br clear="all" />
+				U
+				<br clear="all" />
+				S
+			</div>
+		</div>
+		<div class="likeLinks">
+			<div class="likeContent gplus">
+				<!-- Place this tag where you want the +1 button to render. -->
+				<div class="g-plusone" data-size="medium" data-href="https://plus.google.com/117754382680426902766/posts?hl=en&amp;partnerid=gplp0"></div>
+			</div>
+			<div class="likeContent fb">
+				<div class="fb-like" data-href="https://www.facebook.com/itsmytuition" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
+			</div>
+		</div>
+		<div id="alertSuccess" class="alert alert-success">
+		  	{% block alertSuccessContent %}{% endblock %}
+		</div>
+		<div id="alertError" class="alert alert-error">
+			{% block alertErrorContent %}{% endblock %}
+		</div>
+		<div id="alertInfo" class="alert alert-info">
+		  	{% block alertInfoContent %}{% endblock %}
+		</div>
+		<div id="transparentDiv" class="disableVision"></div>
 		{% block content %} {% endblock %}
 	</div>
 	<div class="footer">
@@ -110,10 +141,44 @@
 		</div>
 		<div class="footerSub">
 			<div class="footerContent">
-				<!-- FB like button goes here. -->
-				<div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="verdana"></div>
+				<a href="https://plus.google.com/117754382680426902766/posts?hl=en&partnerid=gplp0" target="_blank">
+					<div class="image gplusLinkIcon"></div>
+				</a>
+			</div>
+			<div class="footerContent">
+				<a href="https://www.facebook.com/itsmytuition" target="_blank">
+					<div class="image facebookLinkIcon"></div>
+				</a>
+			</div>
+		</div>
+		<div class="footerSub">
+			<div class="footerContent">
+				© 2013 Jayakrishnan Damodaran. All rights reserved.
 			</div>
 		</div>
 	</div>
+	<script>
+		$('#likeLinkToggle').on('click', function () {
+			$(this).next('div.likeLinks').toggle(800);
+		});
+		$('#alertSuccess').hide();
+		$('#alertError').hide();
+		$('#alertInfo').hide();
+		$('#dismissShowException').bind('click', function(elem) {
+			$('#dismissShowException').parent('span').parent('#showException').slideUp(1000);
+		});
+	</script>
+	<!-- Place this tag in your head or just before your close body tag. -->
+	<script type="text/javascript">
+		window.___gcfg = {
+		  lang: 'en-US',
+		  parsetags: 'onload'
+		};
+	  (function() {
+	    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	    po.src = 'https://apis.google.com/js/plusone.js?onload=onLoadCallback';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	  })();
+	</script>
 </body>
 </html>

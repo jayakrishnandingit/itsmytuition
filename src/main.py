@@ -21,10 +21,14 @@ django.dispatch.Signal.disconnect(
     django.core.signals.got_request_exception,
     django.db._rollback_on_exception)
 
-def main():
-    application = wsgi.WSGIHandler()
-    util.run_wsgi_app(application)
+# This is how you must run your application in python27 runtime. The below line should be in a global scope.
+# @see: https://developers.google.com/appengine/docs/python/tools/libraries27#django
+application = wsgi.WSGIHandler()
 
-if __name__ == '__main__':
-    main()
+# This is the old code, python2.5 way.
+# def main():
+#     application = wsgi.WSGIHandler()
+#     util.run_wsgi_app(application)
 
+# if __name__ == '__main__':
+#     main()

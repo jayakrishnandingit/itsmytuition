@@ -12,8 +12,8 @@ def home(request):
     UserFilter().checkUserRole(request.path)
 
     template_values = {
-                       'loggedInEmployee'   : AppManager.getCurrentLoggedInUser(),
-                       'url'                : AppManager.createLogoutURL(request.path),
+                       'loggedInEmployee'   : AppManager.getUserByEmail(AppManager.getCurrentLoggedInUser().email()),
+                       'url'                : AppManager.createLogoutURL(),
                        'homePage'           : '/',
                        'supportEmail'       : SITE_SUPPORT_EMAIL
                        }

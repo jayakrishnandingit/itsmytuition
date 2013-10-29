@@ -1,6 +1,10 @@
+import os
 from google.appengine.api import users
+from tuition.utils.appConstants import OPEN_ID_PROVIDERS, LOGOUT_URLS, APP_DOMAIN
+
 
 class AppManager(object):
+    appDomain = APP_DOMAIN
 
     @staticmethod
     def checkWebLogin():
@@ -49,7 +53,13 @@ class AppManager(object):
         return user
 
     @staticmethod
-    def isUserLoggedIn(requestedPath, redirectPath = '/'):
+    def getUserByEmail(email):
+        from tuition.user.models import User
+
+        return User.all().filter('email =', email).get()
+
+    @staticmethod
+    def isUserLoggedIn(requestedPath, redirectPath='/'):
 
         redirectUrl = False
         if not AppManager.checkWebLogin():
@@ -58,14 +68,28 @@ class AppManager(object):
 
     @staticmethod
     def createLoginURL(redirectPath = '/'):
-        return users.create_login_url(redirectPath)
+        return users.create_login_url(dest_url=redirectPath, federated_identity=OPEN_ID_PROVIDERS.get('google'))
 
     @staticmethod
-    def createLogoutURL(redirectPath):
-        return users.create_logout_url(redirectPath)
+    def createLogoutURL(redirectPath='/'):
+        if AppManager.isDevelopment():
+            return users.create_logout_url(redirectPath)
+        return users.create_logout_url(LOGOUT_URLS.get('google') % (AppManager.getDomain(), redirectPath))
 
     @staticmethod
-    def getLoggedInEmployeePrivileges(requestPath, byPassCheck = False):
+    def isDevelopment():
+        return os.environ['SERVER_SOFTWARE'].startswith('Development')
+
+    @staticmethod
+    def setDomain(domain=APP_DOMAIN):
+        AppManager.appDomain = domain
+
+    @staticmethod
+    def getDomain():
+        return AppManager.appDomain
+
+    @staticmethod
+    def getLoggedInEmployeePrivileges(requestPath, byPassCheck=False):
         import logging
 
         pathParts = requestPath.split('/')

@@ -1,7 +1,14 @@
 application: itsmytuition
 version: 2-1
 api_version: 1
-runtime: python
+runtime: python27
+threadsafe: true
+
+libraries:
+- name: PIL
+  version: latest
+- name: django
+  version: "1.2"
 
 handlers:
 #- url: /_ah/login_required
@@ -27,6 +34,15 @@ handlers:
   expiration: '3650d'
   login: required
 
-- url: /.*
-  script: main.py
+- url: /js/(.+)\..+\.\d+\.js
+  static_files: tuition/media/js/\1.js
+  upload: tuition/media/js/*.*
+  expiration: '3650d'
+  login: required
 
+- url: /js
+  static_dir: tuition/media/js
+  login: required
+
+- url: /.*
+  script: main.application

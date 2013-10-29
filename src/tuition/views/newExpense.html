@@ -5,47 +5,29 @@
 	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 {% endblock %}
-{% block content %}
-	<h2>Mark Your Expenses</h2>
-	<div class="formContainer">
-		<form action="" method="post" class="addAnExpense" name="addAnExpense" id="addAnExpense">
-			<div class="formLabel">
-				Name
-			</div>
-			<div class="formField">
-				{{ form.user }}
-			</div>
-			<div class="formLabel">
-				Type of Expense
-			</div>
-			<div class="formField">
-				{{ form.type }}
-			</div>
-			<div class="formLabel">
-				Amount
-			</div>
-			<div class="formField">
-				{{ form.amount }}
-			</div>
-			<div class="formLabel">
-				Date of Expense
-			</div>
-			<div class="formField">
-				{{ form.dateOfExpense }}
-			</div>
-			<div class="formLabel">
-				Comments
-			</div>
-			<div class="formField">
-				{{ form.comments }}
-			</div>
-			<div class="saveButtonContainer">
-				<input type="button" value="Save">
-				<input type="button" value="Do it Later" class="cancelSave">
-			</div>
-		</form>
+{% block alertSuccessContent %}
+	<div id="expenseSuccessAlert" class="content">
+		<b>Great!</b> You successfully marked your expenses.		
 	</div>
+{% endblock %}
+{% block alertErrorContent %}
+	<div id="expenseErrorAlert" class="content">
+		<b>Oops!</b> Clean a few things up and try submitting again.
+	</div>
+{% endblock %}
+{% block content %}
+	<h2 class="marginTop2P5P">Mark Your Expenses</h2>
+	{% include "templates/newExpenseForm.html" %}
 	<script>
+		$('.formContainer').show();
 		$("#id_dateOfExpense" ).datepicker({'dateFormat' : 'dd/mm/yy'});
+		$('#saveAnExpenseButton').bind('click', function() {
+  			saveAnExpense(false);
+  			$(this).prop('disabled',true);
+  			$(this).val('Wait');
+		});
+		$('#cancelSaveExpenseButton').bind('click', function(){
+			window.location.href = "/";
+		});
 	</script>
 {% endblock %}

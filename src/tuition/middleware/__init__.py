@@ -6,11 +6,13 @@ class HandleRequests(object):
         from tuition.settings import SITE_DOWN_FOR_MAINTENANCE, SITE_DOWN_DESCRIPTION, SITE_SUPPORT_EMAIL
         from tuition.utils.manager import AppManager
 
+        AppManager.setDomain(request.get_host())
         if AppManager.isCurrentUserAppAdmin():
             return None
 
         url = AppManager.isUserLoggedIn(request.path, request.path)
         if url:
+            logging.info('User has not logged in through Google Accounts.')
             logging.info('Going to redirect user to %s.' % url)
             return http.HttpResponseRedirect(url)
 
@@ -19,7 +21,15 @@ class HandleRequests(object):
             if SITE_DOWN_FOR_MAINTENANCE:
                 return render_to_response('siteDown.html', {'description' : SITE_DOWN_DESCRIPTION, 'supportEmail' : SITE_SUPPORT_EMAIL})
             # implement any OAuth in future.
+            if not AppManager.getUserByEmail(user.email()) and request.path not in SAFE_TO_REDIRECT_URI:
+                logging.info('User has not registered yet.')
+                logging.info('Going to redirect user to /register')
+                return http.HttpResponseRedirect('/register?firstLogin=1')
             return None
         return None
 
-
+SAFE_TO_REDIRECT_URI = [
+    '/register',
+    '/ajaxCall/saveUser',
+    '/oauth2callback'
+]
